@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Veresiye.Model;
 
-namespace Veresiye.Data.Builders
+namespace Veresiye.Data.Builder
 {
     public class CompanyBuilder
     {

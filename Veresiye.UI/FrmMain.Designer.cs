@@ -38,6 +38,7 @@
             this.IsMdiContainer = true;
             this.Name = "FrmMain";
             this.Text = "Veresiye";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.ResumeLayout(false);
 

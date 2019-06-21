@@ -37,6 +37,11 @@ namespace Veresiye.Service
             return activityRepository.GetAll();
         }
 
+        public IEnumerable<Activity> GetAllByCompanyId(int companyId)
+        {
+            return activityRepository.GetAll(x => x.CompanyId == companyId);
+        }
+
         public void Insert(Activity activity)
         {
             activityRepository.Insert(activity);
@@ -48,6 +53,7 @@ namespace Veresiye.Service
             activityRepository.Update(activity);
             unitOfWork.SaveChanges();
         }
+        
     }
 
     public interface IActivityService
@@ -56,6 +62,7 @@ namespace Veresiye.Service
         void Update(Activity activity);
         void Delete(int id);
         IEnumerable<Activity> GetAll();
+        IEnumerable<Activity> GetAllByCompanyId(int companyId);
         Activity Get(int id);
     }
 }
