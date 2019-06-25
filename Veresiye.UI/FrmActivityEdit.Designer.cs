@@ -1,6 +1,7 @@
 ﻿namespace Veresiye.UI
 {
-    partial class FrmActivityAdd
+    partial class FrmActivityEdit
+
     {
         /// <summary>
         /// Required designer variable.

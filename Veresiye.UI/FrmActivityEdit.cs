@@ -12,24 +12,30 @@ using Veresiye.Service;
 
 namespace Veresiye.UI
 {
-    public partial class FrmActivityAdd : Form
+    public partial class FrmActivityEdit : Form
     {
-        private int CompanyId;
+        private int activityId;
         public FrmCompanyEdit MasterForm { get; set; }
         private readonly IActivityService activityService;
-        public FrmActivityAdd(IActivityService activityService)
+        public FrmActivityEdit
+            (IActivityService activityService)
         {
             this.activityService = activityService;
 
             InitializeComponent();
         }
-        public void LoadForm(int companyId)
+        public void LoadForm( int activityId)
         {
-            this.CompanyId = companyId;
-            this.txtName.Clear();
-            this.txtAmount.Clear();
-            this.dtpTransactionDate.Value = DateTime.Now;
-            this.cmbActivityType.SelectedIndex = -1;
+            this.activityId = activityId;
+            var activity = activityService.Get(activityId);
+            if (activity != null)
+            {
+                this.txtName.Text = activity.Name;
+                this.txtAmount.Text = activity.Amount.ToString();
+                this.dtpTransactionDate.Value = activity.TransactionDate;
+                this.cmbActivityType.SelectedIndex = ((int)activity.ActivityType) - 1;
+            }
+            
             
         }
 
@@ -56,13 +62,12 @@ namespace Veresiye.UI
                 MessageBox.Show("İşlem türü gereklidir.");
                 return;
             }
-            var activity = new Activity();
-            activity.CompanyId = this.CompanyId;
+            var activity = activityService.Get(this.activityId);
             activity.Name = txtName.Text;
             activity.Amount = Convert.ToDecimal(txtAmount.Text);
             activity.ActivityType = (ActivityType)(cmbActivityType.SelectedIndex + 1);
             activity.TransactionDate = dtpTransactionDate.Value;
-            activityService.Insert(activity);
+            activityService.Update(activity);
             MasterForm.LoadActivities();
             this.Hide();
         }

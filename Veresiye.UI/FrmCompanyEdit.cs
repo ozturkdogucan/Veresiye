@@ -17,15 +17,19 @@ namespace Veresiye.UI
         private readonly ICompanyService companyService;
         private readonly IActivityService activityService;
         private readonly FrmActivityAdd frmActivityAdd;
+        private readonly FrmActivityEdit frmActivityEdit;
         public FrmCompanies MasterForm { get; set; }
-        public FrmCompanyEdit(ICompanyService companyService, IActivityService activityService, FrmActivityAdd frmActivityAdd)
+        public FrmCompanyEdit(ICompanyService companyService, IActivityService activityService, FrmActivityAdd frmActivityAdd, FrmActivityEdit frmActivityEdit)
         {
             this.companyService = companyService;
             this.activityService = activityService;
             this.frmActivityAdd = frmActivityAdd;
+            this.frmActivityEdit = frmActivityEdit;
             InitializeComponent();
             this.frmActivityAdd.MdiParent = this.MdiParent;
             this.frmActivityAdd.MasterForm = this;
+            this.frmActivityEdit.MdiParent = this.MdiParent;
+            this.frmActivityEdit.MasterForm = this;
         }
 
         private void FrmCompanyEdit_Load(object sender, EventArgs e)
@@ -95,7 +99,38 @@ namespace Veresiye.UI
         private void BtnAdd_Click(object sender, EventArgs e)
         {
             frmActivityAdd.Show();
-            frmActivityAdd.LoadForm();
+            frmActivityAdd.LoadForm(this.Id);
+        }
+
+        private void BtnUpdate_Click(object sender, EventArgs e)
+        {
+            if (this.dataGridView1.SelectedRows.Count > 0)
+            {
+                this.frmActivityEdit.Show();
+                this.frmActivityEdit.LoadForm(int.Parse(this.dataGridView1.SelectedRows[0].Cells[0].Value.ToString()));
+
+            }
+            else
+            {
+                MessageBox.Show("Lütfen düzenlemek istediğiniz işlemi seçiniz. ");
+            }
+        }
+
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            if (this.dataGridView1.SelectedRows.Count > 0)
+            {
+                var result = MessageBox.Show("Bu işlem kaydını silmek istediğinize emin misiniz?", "Silme İşlemi", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    this.activityService.Delete(int.Parse(this.dataGridView1.SelectedRows[0].Cells[0].Value.ToString()));
+                    this.LoadActivities();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Lütfen silmek istediğiniz işlemi seçiniz. ");
+            }
         }
     }
 }
